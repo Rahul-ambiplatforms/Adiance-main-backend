@@ -9,18 +9,17 @@ router.post("/register", (req, res) => {
     const { company, email, mobile, userType, country, message } = req.body;
 
     try {
-        // console.log(req.body);
         const transporter = nodeMailer.createTransport({
             service: 'gmail',
             auth: {
-                user: "bhaibhaihudhuddabang@gmail.com",
-                pass: "maadhtfkjjluwahs",
+                user: "contact@adiance.com",
+                pass: "gxedhzxryiwblyfm",
             }
         });
 
         const mailOptions = {
-            from: "bhaibhaihudhuddabang@gmail.com",
-            to: "bhaibhaihudhuddabang@gmail.com",
+            from: "contact@adiance.com",
+            to: "contact@adiance.com",
             subject: "Sending Requirements to Adiance",
             html: `
                 <h1>New Requirement Received</h1>
@@ -38,7 +37,7 @@ router.post("/register", (req, res) => {
                 console.log(error);
                 res.status(500).send('Error occurred while sending email');
             } else {
-                console.log('Email sent: ' + info.response);
+                // console.log('Email sent: ' + info.response);
                 res.status(200).send('Email sent successfully');
             }
         });
@@ -56,14 +55,14 @@ router.post("/feedback", (req, res) => {
         const transporter = nodeMailer.createTransport({
             service: 'gmail',
             auth: {
-                user: "bhaibhaihudhuddabang@gmail.com",
-                pass: "maadhtfkjjluwahs",
+                user: "contact@adiance.com",
+                pass: "gxedhzxryiwblyfm",
             }
         });
 
         const mailOptions = {
-            from: "bhaibhaihudhuddabang@gmail.com",
-            to: "bhaibhaihudhuddabang@gmail.com",
+            from: "contact@adiance.com",
+            to: "contact@adiance.com",
             subject: "Sending Feedback to Adiance",
             html: `
                 <h1>${subject}</h1>
@@ -82,7 +81,7 @@ router.post("/feedback", (req, res) => {
                 console.log(error);
                 res.status(500).send('Error occurred while sending email');
             } else {
-                console.log('Email sent: ' + info.response);
+                // console.log('Email sent: ' + info.response);
                 res.status(200).send('Email sent successfully');
             }
         });
