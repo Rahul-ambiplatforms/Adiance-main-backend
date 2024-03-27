@@ -18,7 +18,9 @@ app.use(router);
 app.use(express.json());
 app.use("/api/blogs", blogRoutes);
 app.use('/images', express.static(path.join(__dirname, 'uploads')));
-
+app.get('/', (req, res) => {
+  res.send('<h1>Welcome to Adiance App!</h1>');
+});
 
 const fs = require('fs');
 
