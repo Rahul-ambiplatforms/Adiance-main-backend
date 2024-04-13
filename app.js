@@ -1,5 +1,6 @@
 const express=require('express');
 const app = express();
+const https = require('https');
 const router=require('./Routes/router');
 const cors=require("cors");
 require("dotenv").config();
@@ -7,10 +8,13 @@ const mongoose = require("mongoose");
 const blogRoutes = require("./Routes/blogRoutes");
 const multer = require('multer');
 const path = require('path');
-
+const fs = require('fs');
 const MONGODB_URI = "mongodb+srv://poojanambiplatforms:vXBvqSXLgTeftxwt@adiance-blog-db.r1vwjfr.mongodb.net/adiance-blog-db?retryWrites=true&w=majority";
-
-const PORT=8007;
+// Path to your SSL/TLS certificate and key
+const privateKey = fs.readFileSync('/etc/letsencrypt/live/adiance.com/privkey.pem', 'utf8');
+const certificate = fs.readFileSync('/etc/letsencrypt/live/adiance.com/fullchain.pem', 'utf8');
+const credentials = { key: privateKey, cert: certificate };
+const PORT=443;
 app.use(cors());
   
 app.use(router);
@@ -22,7 +26,7 @@ app.get('/', (req, res) => {
   res.send('<h1>Welcome to Adiance App!</h1>');
 });
 
-const fs = require('fs');
+
 
 const uploadDirectory = 'uploads/';
 
@@ -74,8 +78,8 @@ app.post('/upload', upload.single('image'), (req, res) => {
 mongoose.connect(MONGODB_URI)
   .then(() => {
     console.log("Connected to MongoDB");
-    const PORT = 8007;
-    app.listen(PORT, () => {
+    const httpsServer = https.createServer(credentials, app);
+    httpsServer.listen(PORT, () => {
       console.log(`Server is running on port ${PORT}`);
     });
   })
