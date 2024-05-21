@@ -33,7 +33,7 @@ exports.createBlog = async (req, res) => {
 // Get all blogs
 exports.getAllBlogs = async (req, res) => {
   const page = parseInt(req.query.page) || 1;
-  const limit = parseInt(req.query.limit) || 10; // Default limit to 10 blogs per page
+  const limit = parseInt(req.query.limit) || 6; // Default limit to 10 blogs per page
   const skip = (page - 1) * limit;
 
   try {
