@@ -8,6 +8,8 @@ const blogRoutes = require("./Routes/blogRoutes");
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+const xlsx = require("xlsx");
+
 
 const MONGODB_URI = "mongodb+srv://poojanambiplatforms:vXBvqSXLgTeftxwt@adiance-blog-db.r1vwjfr.mongodb.net/adiance-blog-db?retryWrites=true&w=majority";
 const PORT = 8007; // Use any available port for HTTP
@@ -53,6 +55,39 @@ app.post('/upload', upload.single('image'), (req, res) => {
     res.status(500).send("Error uploading file.");
   }
 });
+
+
+app.post("/subscribe", (req, res) => {
+  const { name, email } = req.body;
+
+  if (!name || !email) {
+    return res.status(400).send("Name and Email are required");
+  }
+
+  const filePath = "./subscribers.xlsx";
+  let workbook;
+
+  // Check if file exists, if not create a new one
+  try {
+    workbook = xlsx.readFile(filePath);
+  } catch (error) {
+    workbook = xlsx.utils.book_new();
+  }
+
+  const sheetName = "Subscribers";
+  const worksheet = workbook.Sheets[sheetName] || xlsx.utils.aoa_to_sheet([["Name", "Email"]]);
+
+  // Append the new subscriber data
+  const newRow = [name, email];
+  xlsx.utils.sheet_add_aoa(worksheet, [newRow], { origin: -1 });
+
+  workbook.Sheets[sheetName] = worksheet;
+  xlsx.utils.book_append_sheet(workbook, worksheet, sheetName);
+  xlsx.writeFile(workbook, filePath);
+
+  res.send("Subscription successful!");
+});
+
 
 mongoose.connect(MONGODB_URI)
   .then(() => {
